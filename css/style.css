@@ -173,7 +173,6 @@ div.chordtooltip {
 #piePurpose1, #piePurpose2, #pieMode1, #pieMode2, #pieTransitModelMode, #pieTransitSurveyMode {
     height: 360px;
     position: relative;
-    width: 360px;
 }
 
 .modepurposetooltip {

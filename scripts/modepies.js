@@ -82,11 +82,28 @@ d3.csv("data/csv18_survey_transit_access.csv", function(data) {
 
     // like the canvas
     var svg = d3.select(chartId).append('svg')
-        .attr('width', width + margin.right + margin.left)
-        .attr('height', height + margin.top + margin.bottom)
-        .append('g')
-        .attr('transform', 'translate(' + ((width + margin.right + margin.left) / 2) +
-      ',' + ((250 + margin.top + margin.bottom) / 2) + ')');
+      .attr("preserveAspectRatio", "xMinYMin meet")
+      .attr("viewBox", "-5 20 300 300")
+      .attr("align","center")
+      .append("g")
+      .attr('transform', 'translate(' + ((width + margin.right + margin.left) / 2) +
+      ',' + ((250 + margin.top + margin.bottom) / 2) + ')')
+     
+    svg.append("text")
+      .style("text-anchor", "middle")
+      .attr('transform', 'translate(0, -10)')
+      .attr('class', 'category')
+
+    svg.append("text")
+    .style("text-anchor", "middle")
+    .attr('transform', 'translate(0, 10)')
+    .attr('class', 'value')
+
+    svg.append("text")
+    .style("text-anchor", "middle")
+    .attr('transform', 'translate(0, 30)')
+    .attr('class', 'percent')
+      
 
     // arc is path generator
     var arc = d3.arc().
@@ -101,18 +118,6 @@ d3.csv("data/csv18_survey_transit_access.csv", function(data) {
     value(function(d) {
       return d.count;
     });
-
-    var tooltip = d3.select(chartId)
-      .append('div')
-      .attr('class', 'modepurposetooltip')
-      .attr('id', tooltipName)
-      .style('opacity', 1);
-    tooltip.append('div')
-      .attr('class', 'label');
-    tooltip.append('div')
-      .attr('class', 'count');
-    tooltip.append('div')
-      .attr('class', 'percent');
 
     var path = svg.selectAll('path').
       data(pie(data)).
@@ -133,14 +138,17 @@ d3.csv("data/csv18_survey_transit_access.csv", function(data) {
           .duration(500)
           .attr("d", arcHover)
           .each(function(d1) {
+            console.log(d1.data.count)
 
             // find correct tooltip
-            var tooltip = d3.select(this.ownerSVGElement.parentNode.childNodes[1]);
-            tooltip.select('.label').html("<font color = 'black'>" + d1.data.label + "</font>");
-            tooltip.select('.count').html(formatComma(d1.data.count));
-            tooltip.select('.percent').html(d3.format(".1f")(d1.data.percent * 100) + '%');
-            tooltip
-            .style('display', 'block')
+            d3.select('.category')
+              .html(d1.data.label)
+
+              d3.select('.value')
+              .html(d3.format(",")(d1.data.count))
+
+              d3.select('.percent')
+              .html(d3.format(".1f")(d1.data.percent * 100) + '%')
 
           })
     }).
