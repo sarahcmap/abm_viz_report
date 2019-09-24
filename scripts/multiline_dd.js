@@ -39,15 +39,14 @@ var h = ["", "03:00 AM to 05:00 AM",
   "11:30 PM to 12:00 AM",
   "12:00 PM to 03:00 AM"
 ]
-//make_multi_line_dd("data/csv37_tours_tod.csv", "my_dataviz", "#todcat")
 
 function make_multi_line_dd(csv, divID, catID, legendID) {
   var margin = {
-      top: 50,
-      right: 100,
-      bottom: 30,
-      left: 60
-    },
+    top: 50,
+    right: 100,
+    bottom: 30,
+    left: 60
+  },
     width = 700 - margin.left - margin.right,
     height = 400 - margin.top - margin.bottom;
 
@@ -60,21 +59,19 @@ function make_multi_line_dd(csv, divID, catID, legendID) {
     .attr("transform",
       "translate(" + margin.left + "," + margin.top + ")");
 
-
-
   //Read the data
-  d3.csv(csv, function(data) {
+  d3.csv(csv, function (data) {
 
     catInt = d3.select(catID).property('value');
     d3.select(catID).on('change', update);
 
-    var newdata = data.filter(function(d) {
+    var newdata = data.filter(function (d) {
       return d.cat == catInt;
     });
 
     // group the data: I want to draw one line per group
     var sumstat = d3.nest() // nest function allows to group the calculation per level of a factor
-      .key(function(d) {
+      .key(function (d) {
         if (d.cat == catInt) {
           return d.subgroup
         }
@@ -89,7 +86,7 @@ function make_multi_line_dd(csv, divID, catID, legendID) {
     svg.append("g")
       .attr("class", "xaxis")
       .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(x).ticks(40).tickFormat(function(d, i) {
+      .call(d3.axisBottom(x).ticks(40).tickFormat(function (d, i) {
         return i % 3 ? "" : h[d]
       }))
       .selectAll("text")
@@ -101,7 +98,7 @@ function make_multi_line_dd(csv, divID, catID, legendID) {
 
     // Add Y axis
     var y = d3.scaleLinear()
-      .domain([0, d3.max(newdata, function(d) {
+      .domain([0, d3.max(newdata, function (d) {
         return +d.value;
       })])
       .range([height, 0]);
@@ -110,7 +107,7 @@ function make_multi_line_dd(csv, divID, catID, legendID) {
       .call(d3.axisLeft(y).tickFormat(d3.format(".0%")));
 
     // color palette
-    var res = sumstat.map(function(d) {
+    var res = sumstat.map(function (d) {
       return d.key
     }) // list of group names
     var color = d3.scaleOrdinal()
@@ -159,6 +156,7 @@ function make_multi_line_dd(csv, divID, catID, legendID) {
       .style("font-size", "14px")
       .style("font-family", "sans-serif")
       .attr("alignment-baseline", "middle")
+      
     // Draw the line
     svg.selectAll(".line")
       .data(sumstat)
@@ -166,19 +164,19 @@ function make_multi_line_dd(csv, divID, catID, legendID) {
       .append("path")
       .attr("class", "line")
       .attr("fill", "none")
-      .attr("stroke", function(d) {
+      .attr("stroke", function (d) {
         return color(d.key)
       })
       .attr("stroke-width", 1.5)
-      .attr("stroke-dasharray", function(d) {
+      .attr("stroke-dasharray", function (d) {
         return d.key.startsWith('Survey') ? ("10,3") : ("1,0")
       })
-      .attr("d", function(d) {
+      .attr("d", function (d) {
         return d3.line()
-          .x(function(d) {
+          .x(function (d) {
             return x(d.xaxis);
           })
-          .y(function(d) {
+          .y(function (d) {
             return y(+d.value);
           })
           (d.values)
@@ -187,13 +185,13 @@ function make_multi_line_dd(csv, divID, catID, legendID) {
     function update() {
 
       catInt = d3.select(catID).property('value');
-      var newdata = data.filter(function(d) {
+      var newdata = data.filter(function (d) {
         return d.cat == catInt;
       });
 
       // group the data: I want to draw one line per group
       var sumstat = d3.nest() // nest function allows to group the calculation per level of a factor
-        .key(function(d) {
+        .key(function (d) {
           if (d.cat == catInt) {
             return d.subgroup
           }
@@ -212,7 +210,7 @@ function make_multi_line_dd(csv, divID, catID, legendID) {
       svg.append("g")
         .attr("class", "xaxis")
         .attr("transform", "translate(0," + height + ")")
-        .call(d3.axisBottom(x).ticks(40).tickFormat(function(d, i) {
+        .call(d3.axisBottom(x).ticks(40).tickFormat(function (d, i) {
           return i % 3 ? "" : h[d]
         }))
         .selectAll("text")
@@ -224,7 +222,7 @@ function make_multi_line_dd(csv, divID, catID, legendID) {
 
       // Add Y axis
       var y = d3.scaleLinear()
-        .domain([0, d3.max(newdata, function(d) {
+        .domain([0, d3.max(newdata, function (d) {
           return +d.value;
         })])
         .range([height, 0]);
@@ -234,7 +232,7 @@ function make_multi_line_dd(csv, divID, catID, legendID) {
         .call(d3.axisLeft(y).tickFormat(d3.format(".0%")));
 
       // color palette
-      var res = sumstat.map(function(d) {
+      var res = sumstat.map(function (d) {
         return d.key
       }) // list of group names
       var color = d3.scaleOrdinal()
@@ -248,19 +246,19 @@ function make_multi_line_dd(csv, divID, catID, legendID) {
         .append("path")
         .attr("class", "line")
         .attr("fill", "none")
-        .attr("stroke", function(d) {
+        .attr("stroke", function (d) {
           return color(d.key)
         })
         .attr("stroke-width", 1.5)
-        .attr("stroke-dasharray", function(d) {
+        .attr("stroke-dasharray", function (d) {
           return d.key.startsWith('Survey') ? ("10,3") : ("1,0")
         })
-        .attr("d", function(d) {
+        .attr("d", function (d) {
           return d3.line()
-            .x(function(d) {
+            .x(function (d) {
               return x(d.xaxis);
             })
-            .y(function(d) {
+            .y(function (d) {
               return y(+d.value);
             })
             (d.values)
